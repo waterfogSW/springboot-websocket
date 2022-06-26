@@ -8,8 +8,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.waterfogsw.springbootwebsocket.channel.entity.Channel;
-import com.waterfogsw.springbootwebsocket.message.entity.Message;
+import com.waterfogsw.springbootwebsocket.message.dto.MessageCreateRequest;
 import com.waterfogsw.springbootwebsocket.message.service.MessageService;
 
 @Component
@@ -27,10 +26,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
   @Override
   protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-    String payload = message.getPayload();
+    final var payload = message.getPayload();
     log.info("payload {}", payload);
-    Message channelMessage = objectMapper.readValue(payload, Message.class);
-    Channel channel = channelMessage.getChannel();
-    channel.handleActions(session, channelMessage, messageService);
+    final var request = objectMapper.readValue(payload, MessageCreateRequest.class);
+    final var newMessage = messageService.create(request);
+    final var channel = newMessage.getChannel();
+    channel.handleActions(session, newMessage, messageService);
   }
 }

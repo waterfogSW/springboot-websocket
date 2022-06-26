@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.waterfogsw.springbootwebsocket.channel.entity.Channel;
 import com.waterfogsw.springbootwebsocket.channel.repository.ChannelRepository;
+import com.waterfogsw.springbootwebsocket.common.exception.NotFoundException;
 import com.waterfogsw.springbootwebsocket.member.service.MemberService;
 
 @Service
@@ -29,5 +30,11 @@ public class DefaultChannelService implements ChannelService {
   @Override
   public List<Channel> findAll() {
     return channelRepository.findAll();
+  }
+
+  @Override
+  public Channel findById(Long id) {
+    return channelRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("Channel not found"));
   }
 }

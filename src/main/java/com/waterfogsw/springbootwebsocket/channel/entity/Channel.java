@@ -16,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.waterfogsw.springbootwebsocket.member.entity.Member;
 import com.waterfogsw.springbootwebsocket.message.entity.Message;
+import com.waterfogsw.springbootwebsocket.message.entity.MessageType;
 import com.waterfogsw.springbootwebsocket.message.service.MessageService;
 
 @Entity
@@ -41,6 +42,11 @@ public class Channel {
 
   public void handleActions(WebSocketSession session, Message message,
       MessageService messageService) {
+    if (!message.getMessageType().equals(MessageType.TALK)) {
+      sessions.add(session);
+      message.promptMessage(message.getSender().getName(), message.getMessageType());
+    }
+    sendMessage(message, messageService);
   }
 
   public Long getId() {
@@ -49,5 +55,9 @@ public class Channel {
 
   public void updateCreator(Member creator) {
     this.creator = creator;
+  }
+
+  public <T> void sendMessage(T message, MessageService messageService) {
+    sessions.parallelStream().forEach(session -> messageService.sendMessage(session, message));
   }
 }

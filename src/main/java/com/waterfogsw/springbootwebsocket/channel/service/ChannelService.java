@@ -8,4 +8,6 @@ public interface ChannelService {
   void create(Channel channel, Long creatorId);
 
   List<Channel> findAll();
+
+  Channel findById(Long id);
 }
