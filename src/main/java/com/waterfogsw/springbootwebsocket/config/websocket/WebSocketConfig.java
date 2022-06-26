@@ -1,4 +1,4 @@
-package com.waterfogsw.springbootwebsocket.config;
+package com.waterfogsw.springbootwebsocket.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -8,10 +8,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-public class WebSockConfig implements WebSocketConfigurer {
+public class WebSocketConfig implements WebSocketConfigurer {
   private final WebSocketHandler webSocketHandler;
 
-  public WebSockConfig(WebSocketHandler webSocketHandler) {
+  public WebSocketConfig(WebSocketHandler webSocketHandler) {
     this.webSocketHandler = webSocketHandler;
   }
 
